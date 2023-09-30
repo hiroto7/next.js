@@ -29,6 +29,7 @@ import { callServer } from '../../app-call-server'
 import { PrefetchKind } from './router-reducer-types'
 import { hexHash } from '../../../shared/lib/hash'
 import { NEXT_DID_POSTPONE_HEADER } from '../../../lib/constants'
+import { removeBasePath } from '../../remove-base-path'
 
 export type FetchServerResponseResult = [
   flightData: FlightData,
@@ -92,6 +93,8 @@ export async function fetchServerResponse(
       if (process.env.__NEXT_CONFIG_OUTPUT === 'export') {
         if (fetchUrl.pathname.endsWith('/')) {
           fetchUrl.pathname += 'index.txt'
+        } else if (removeBasePath(fetchUrl.pathname) === '/') {
+          fetchUrl.pathname += '/index.txt'
         } else {
           fetchUrl.pathname += '.txt'
         }
